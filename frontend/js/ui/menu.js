@@ -27,13 +27,11 @@ export function initMenu() {
         currentKingdom = new Kingdom(name);
         menu.remove();
 
-        // affichage du nom centré
         const title = document.createElement("h1");
         title.id = "kingdomTitle";
         title.innerText = `${currentKingdom.name}`;
         document.body.appendChild(title);
 
-        // lance builder
         initMap();
     });
 }
