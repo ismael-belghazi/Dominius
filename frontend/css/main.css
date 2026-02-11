@@ -1,0 +1,44 @@
+.menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.menu-box {
+    background: #111;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    color: white;
+}
+
+.menu-box h2 {
+    margin-bottom: 15px;
+}
+
+.menu-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background: #222;
+    border: none;
+    color: white;
+}
+
+.menu-box button {
+    width: 100%;
+    padding: 10px;
+    background: crimson;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.menu-box button:hover {
+    background: darkred;
+}

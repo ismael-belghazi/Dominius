@@ -1,0 +1,75 @@
+body {
+    margin: 0;
+    background-color: #222;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#builderContainer {
+    display: flex;
+    height: 100vh;
+}
+
+/* --- menu latéral --- */
+#tileSelector {
+    width: 120px;
+    background: #111;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* cases du menu */
+.tile-option {
+    width: 40px;
+    height: 40px;
+    border: 2px solid white;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+/* sélection visible */
+.tile-option.selected {
+    outline: 3px solid red;
+}
+
+/* couleurs du menu */
+.tile-option.grass { background-color: #2ECC71; }
+.tile-option.water { background-color: #1E90FF; }
+.tile-option.sand  { background-color: #F1C40F; }
+
+/* --- zone de peinture droite --- */
+#mapContainer {
+    flex-grow: 1;
+    background-color: #333;
+    position: relative;
+    overflow: hidden;
+}
+
+/* tiles dessinables */
+.tile {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: none; /* plus de bordure pour le rendu pixel art */
+}
+
+/* textures visibles */
+.tile.grass { background-color: #2ECC71; }
+.tile.water { background-color: #1E90FF; }
+.tile.sand  { background-color: #F1C40F; }
+
+/* titre centré */
+#kingdomTitle {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Arial, sans-serif;
+    font-size: 28px;
+    color: white;
+    z-index: 1000;
+}
