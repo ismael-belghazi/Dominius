@@ -1,0 +1,92 @@
+name: Deploy Documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - backend
+      - master
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Set up Node.js and Install Dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.19.0'
+      - run: |
+          cd dominius-backend
+          npm ci
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Cache pip and MkDocs
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: mkdocs-material-${{ runner.os }}-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: mkdocs-material-
+
+      - name: Install MkDocs and Theme
+        run: pip install mkdocs mkdocs-material
+
+      - name: Install MkDocs Awesome Pages Plugin
+        run: pip install mkdocs-awesome-pages-plugin
+
+      - name: Generate TypeScript Documentation
+        run: |
+          cd dominius-backend
+          npx --no-install typedoc \
+            --plugin typedoc-plugin-markdown \
+            --entryPointStrategy expand \
+            --out ./documentation/docs \
+            "src/**/*.ts" \
+            --excludePrivate \
+            --excludeProtected \
+            --readme none
+
+      - name: Build MkDocs Site
+        run: |
+          cd dominius-backend/documentation
+          mkdocs build --strict
+
+      - name: Add generated files, including ignored files
+        run: |
+          cd dominius-backend/documentation
+          git add -f site
+
+      - name: Check if Documentation Changed
+        id: check
+        run: |
+          cd dominius-backend/documentation
+          if [ -d "site" ] && [ "$(ls -A site)" ]; then
+            git diff --cached --quiet || echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy MkDocs
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          cd dominius-backend/documentation
+          mkdocs gh-deploy --config-file mkdocs.yml --force --clean
+
+
+      - name: Skip Deployment
+        if: steps.check.outputs.changed == 'false'
+        run: echo "La documentation n'a pas changé, déploiement ignoré."

@@ -1,0 +1,7 @@
+version: "3.9"
+
+services:
+  backend:
+    command: npx ts-node-dev --respawn --transpile-only src/server.ts
+    environment:
+      NODE_ENV: development
