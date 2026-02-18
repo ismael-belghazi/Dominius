@@ -59,7 +59,7 @@ jobs:
 
       - name: Build MkDocs Site
         run: |
-          cd documentation
+          cd dominius-backend/documentation
           mkdocs build --strict
 
       - name: Check if Documentation Changed
