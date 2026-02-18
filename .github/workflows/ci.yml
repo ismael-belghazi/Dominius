@@ -82,7 +82,10 @@ jobs:
 
       - name: Deploy MkDocs
         if: steps.check.outputs.changed == 'true'
-        run: mkdocs gh-deploy --force --clean
+        run: |
+          cd dominius-backend/documentation
+          mkdocs gh-deploy --config-file mkdocs.yml --force --clean
+
 
       - name: Skip Deployment
         if: steps.check.outputs.changed == 'false'
