@@ -58,7 +58,9 @@ jobs:
             --readme none
 
       - name: Build MkDocs Site
-        run: mkdocs build --strict
+        run: |
+          cd documentation
+          mkdocs build --strict
 
       - name: Check if Documentation Changed
         id: check
