@@ -1,5 +1,3 @@
-// Power Tree System integrated into Power Panel
-// Powers are organized in a tree with unlock progression (positive and negative powers)
 
 export const POWER_TREE = {
     meteor: {
@@ -52,7 +50,6 @@ export class PowerPanel {
         this.tree = { ...POWER_TREE };
     }
 
-    // Unlock a power (if not already unlocked and parent unlocked)
     unlockPower(powerKey) {
         const power = this.tree[powerKey];
         if (!power) return false;
@@ -65,20 +62,17 @@ export class PowerPanel {
         return true;
     }
 
-    // Add power points (earned by time/conditions)
     addPoints(amount) {
         this.powerPoints += amount;
         if (window._powerPanel) window._powerPanel.updateStatsDisplay();
     }
 
-    // Get list of unlocked powers
     getUnlockedPowers() {
         return Object.entries(this.tree)
             .filter(([_, p]) => p.unlocked)
             .map(([key, _]) => key);
     }
 
-    // Update stats display if visible
     updateStatsDisplay() {
         if (this.modal) {
             const title = this.modal.querySelector('h2');
@@ -86,12 +80,10 @@ export class PowerPanel {
         }
     }
 
-    // Check if a power is unlocked
     isPowerUnlocked(powerKey) {
         return this.tree[powerKey]?.unlocked || false;
     }
 
-    // Create and show the power tree modal
     openTreeModal() {
         if (this.modal) this.modal.remove();
 
@@ -188,7 +180,7 @@ export class PowerPanel {
         if (!power.unlocked && power.cost <= this.powerPoints && (!power.parent || this.tree[power.parent].unlocked)) {
             btn.addEventListener('click', () => {
                 if (this.unlockPower(key)) {
-                    window._powerPanel.openTreeModal(); // refresh modal
+                    window._powerPanel.openTreeModal(); 
                 }
             });
         }

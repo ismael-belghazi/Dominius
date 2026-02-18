@@ -75,7 +75,6 @@ export function initMap(kingdom) {
 
         if (tx < 0 || ty < 0 || tx >= cols || ty >= rows) return;
 
-        // vérifier si on a déjà dessiné ici (par cellule)
         if (lastPos && lastPos.tx === tx && lastPos.ty === ty) return;
 
         lastPos = { tx, ty };
@@ -112,7 +111,7 @@ export function initMap(kingdom) {
 
     canvas.addEventListener("mouseup", () => {
         isPainting = false;
-        lastPos = null; // reset à la fin du drag
+        lastPos = null; 
     });
     document.body.addEventListener("mouseup", () => {
         isPainting = false;
@@ -120,7 +119,6 @@ export function initMap(kingdom) {
     });
 
     builderContainer.appendChild(canvas);
-    // --- outils supplémentaires: gomme, sauvegarde, terminer ---
     const eraseBtn = document.createElement('button');
     eraseBtn.textContent = 'Effacer';
     eraseBtn.className = 'tool-button';
@@ -130,13 +128,11 @@ export function initMap(kingdom) {
         eraseBtn.classList.add('selected');
     });
 
-    // (Save button removed — finish will keep the map in memory)
 
     const finishBtn = document.createElement('button');
     finishBtn.textContent = 'Terminer Carte';
     finishBtn.className = 'tool-button';
     finishBtn.addEventListener('click', () => {
-        // keep map in memory and lock editing so the game can use it
         const data = {
             tileSize,
             width: canvas.width,
@@ -153,7 +149,6 @@ export function initMap(kingdom) {
         document.querySelectorAll('.tile-option').forEach(el => el.classList.remove('selected'));
         finishBtn.classList.add('selected');
         alert('Carte terminée et stockée. Lancement du jeu...');
-        // start the game by delegating to the local helper which creates the play canvas
         startGameWithSavedMap(window.savedMap);
     });
 
@@ -170,7 +165,6 @@ export function initMap(kingdom) {
             grid
         };
 
-        // open new window and render a read-only view
         const win = window.open('', '_blank', 'width=' + data.width + ',height=' + data.height);
         if (!win) {
                 alert('Impossible d\'ouvrir la fenêtre (bloquée par le navigateur).');
@@ -217,7 +211,6 @@ export function initMap(kingdom) {
         const gameContainer = document.createElement('div');
         gameContainer.id = 'gameContainer';
 
-        // title is already shown by the menu, no need to set it again here
         const stats = document.createElement('div');
         stats.className = 'game-stats';
         stats.innerHTML = `<strong>Royaume</strong><br>${kingdom ? kingdom.name : 'Inconnu'}`;
@@ -237,7 +230,6 @@ export function initMap(kingdom) {
             }
         }
 
-        // Power Tree Button
         const powerTreeBtn = document.createElement('button');
         powerTreeBtn.textContent = 'Arbre de Pouvoir';
         powerTreeBtn.style.cssText = `
@@ -263,14 +255,11 @@ export function initMap(kingdom) {
         gameContainer.style.position = 'relative';
         document.body.appendChild(gameContainer);
 
-        // expose start hook for other modules
         window.startedGame = true;
         window.getSavedMap = () => saved;
         
-        // initialize power tree system
         window._powerPanel = new PowerPanel(kingdom);
         
-        // start the main game loop using the created play canvas
         try {
             startGame(saved, kingdom, playCanvas, window._powerPanel);
         } catch (err) {

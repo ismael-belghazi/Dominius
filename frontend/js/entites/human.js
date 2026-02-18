@@ -8,8 +8,8 @@ export class Human {
         this.size = 6;
     }
 
-    // placeholder update — simulation functions will be used externally
+   
     update() {
-        // no-op here; gameLoop will call movement/hunger/aging
+        
     }
 }

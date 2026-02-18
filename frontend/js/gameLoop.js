@@ -6,7 +6,6 @@ import { aging } from "./simulation/aging.js";
 
 let _rafId = null;
 
-// Import power functions synchronously
 import { meteorStrike } from "./godPowers/meteor.js";
 import { blessing } from "./godPowers/blessing.js";
 import { plague } from "./godPowers/plague.js";
@@ -16,14 +15,11 @@ export function startGame(savedMap, kingdom, canvas, powerPanel) {
     let selectedPower = null;
     let frameCount = 0;
 
-    // ensure kingdom has humans array
     if (!kingdom) kingdom = { humans: [] };
     if (!kingdom.humans) kingdom.humans = [];
 
-    // spawn 5 humans if none
     if (kingdom.humans.length === 0) {
         for (let i = 0; i < 5; i++) {
-            // spawn at a random non-water tile
             let spawned = false;
             for (let attempts = 0; attempts < 100 && !spawned; attempts++) {
                 const rx = Math.floor(Math.random() * savedMap.cols);
@@ -37,7 +33,6 @@ export function startGame(savedMap, kingdom, canvas, powerPanel) {
                 }
             }
             if (!spawned) {
-                // fallback to center
                 kingdom.humans.push(new Human(Math.floor(savedMap.width / 2), Math.floor(savedMap.height / 2)));
             }
         }
@@ -56,27 +51,21 @@ export function startGame(savedMap, kingdom, canvas, powerPanel) {
             updateHunger(h);
             aging(h);
             
-            // Humans try to eat from nearby farms
             tryEatFromBuilding(h);
-            
-            // Humans try to build when near others
+    
             tryBuildStructure(h);
             
-            // if died during hunger update, skip further
             if (!h.alive) continue;
-            // keep humans inside bounds
             h.x = Math.max(0, Math.min(h.x, savedMap.width - h.size));
             h.y = Math.max(0, Math.min(h.y, savedMap.height - h.size));
         }
     }
 
-    // Humans eat from nearby farms
     function tryEatFromBuilding(human) {
         for (const building of buildings) {
             if (building.type !== 'farm') continue;
             if (!building.isHumanInside(human)) continue;
             
-            // try to eat from farm
             if (building.food > 0 && human.hunger < 100) {
                 const eaten = Math.min(20, building.food, 100 - human.hunger);
                 human.hunger += eaten;
@@ -85,12 +74,10 @@ export function startGame(savedMap, kingdom, canvas, powerPanel) {
         }
     }
 
-    // Humans build structures when near others
     function tryBuildStructure(human) {
-        if (Math.random() > 0.001) return; // very rare
-        if (buildings.length >= 100) return; // max buildings
+        if (Math.random() > 0.001) return; 
+        if (buildings.length >= 100) return; 
         
-        // check if there are nearby humans
         let nearbyCount = 0;
         for (const other of humans) {
             if (other === human || !other.alive) continue;
@@ -98,7 +85,6 @@ export function startGame(savedMap, kingdom, canvas, powerPanel) {
             if (dist < 50) nearbyCount++;
         }
         
-        // build if enough people nearby
         if (nearbyCount >= 2) {
             const types = ['farm', 'house', 'market'];
             const type = types[Math.floor(Math.random() * types.length)];
@@ -106,13 +92,11 @@ export function startGame(savedMap, kingdom, canvas, powerPanel) {
         }
     }
 
-    // Earn power points based on living population and buildings (much slower rate)
     function earnPowerPoints() {
         if (!powerPanel) return;
         const livingCount = humans.filter(h => h.alive).length;
-        let totalPoints = livingCount * 0.001; // 10x slower: earn 1 point per 1000 frames per human
+        let totalPoints = livingCount * 0.001; 
         
-        // add points from buildings (also slower)
         for (const building of buildings) {
             totalPoints += building.generatePoints() * 0.1;
         }
@@ -120,14 +104,12 @@ export function startGame(savedMap, kingdom, canvas, powerPanel) {
         powerPanel.addPoints(totalPoints);
     }
 
-    // Build a building at click position
     function buildStructure(x, y, type = 'farm') {
-        if (buildings.length >= 50) return; // max 50 buildings
+        if (buildings.length >= 50) return; 
         const building = new Building(x, y, type);
         buildings.push(building);
     }
 
-    // Open inspection panel for a human
     function inspectHuman(human) {
         selectedHuman = human;
         closeInspectionPanel();
