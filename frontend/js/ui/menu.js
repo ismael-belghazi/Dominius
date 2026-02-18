@@ -32,7 +32,7 @@ export function initMenu() {
         title.innerText = `${currentKingdom.name}`;
         document.body.appendChild(title);
 
-        initMap();
+        initMap(currentKingdom);
     });
 }
 
