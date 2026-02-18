@@ -26,9 +26,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22.19.0' 
-      - run: npm ci 
+      - run: npm install
 
-      - name: Install Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.x
