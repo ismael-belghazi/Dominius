@@ -45,6 +45,9 @@ jobs:
       - name: Install MkDocs and Theme
         run: pip install mkdocs mkdocs-material
 
+      - name: Install MkDocs Awesome Pages Plugin
+        run: pip install mkdocs-awesome-pages-plugin
+
       - name: Generate TypeScript Documentation
         run: |
           cd dominius-backend
@@ -59,7 +62,7 @@ jobs:
 
       - name: Build MkDocs Site
         run: |
-          cd dominius-backend/documentation
+          cd dominius-backend/documentation  
           mkdocs build --strict
 
       - name: Check if Documentation Changed
