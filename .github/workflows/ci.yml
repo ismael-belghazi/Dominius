@@ -25,8 +25,10 @@ jobs:
       - name: Set up Node.js and Install Dependencies
         uses: actions/setup-node@v3
         with:
-          node-version: '22.19.0' 
-      - run: npm install
+          node-version: '22.19.0'
+      - run: |
+          cd dominius-backend
+          npm ci
 
       - name: Set up Python
         uses: actions/setup-python@v5
