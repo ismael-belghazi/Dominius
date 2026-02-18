@@ -6,7 +6,7 @@
 
 # Interface: Human
 
-Defined in: models/human.ts:3
+Defined in: [models/human.ts:3](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: models/human.ts:3
 
 > **age**: `number`
 
-Defined in: models/human.ts:8
+Defined in: [models/human.ts:8](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L8)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: models/human.ts:8
 
 > **health**: `number`
 
-Defined in: models/human.ts:9
+Defined in: [models/human.ts:9](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L9)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: models/human.ts:9
 
 > **hunger**: `number`
 
-Defined in: models/human.ts:10
+Defined in: [models/human.ts:10](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L10)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: models/human.ts:10
 
 > **id**: `number`
 
-Defined in: models/human.ts:4
+Defined in: [models/human.ts:4](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L4)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: models/human.ts:4
 
 > `optional` **intelligence**: `number`
 
-Defined in: models/human.ts:12
+Defined in: [models/human.ts:12](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L12)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: models/human.ts:12
 
 > **kingdomId**: `number`
 
-Defined in: models/human.ts:7
+Defined in: [models/human.ts:7](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L7)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: models/human.ts:7
 
 > `optional` **profession**: [`Profession`](../type-aliases/Profession.md)
 
-Defined in: models/human.ts:11
+Defined in: [models/human.ts:11](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L11)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: models/human.ts:11
 
 > **x**: `number`
 
-Defined in: models/human.ts:5
+Defined in: [models/human.ts:5](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L5)
 
 ***
 
@@ -78,4 +78,4 @@ Defined in: models/human.ts:5
 
 > **y**: `number`
 
-Defined in: models/human.ts:6
+Defined in: [models/human.ts:6](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L6)

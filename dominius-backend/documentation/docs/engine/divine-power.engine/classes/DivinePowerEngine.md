@@ -6,7 +6,7 @@
 
 # Class: DivinePowerEngine
 
-Defined in: engine/divine-power.engine.ts:4
+Defined in: [engine/divine-power.engine.ts:4](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/divine-power.engine.ts#L4)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: engine/divine-power.engine.ts:4
 
 > **new DivinePowerEngine**(`game`): `DivinePowerEngine`
 
-Defined in: engine/divine-power.engine.ts:6
+Defined in: [engine/divine-power.engine.ts:6](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/divine-power.engine.ts#L6)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: engine/divine-power.engine.ts:6
 
 > **smite**(`x`, `y`, `radius`): `void`
 
-Defined in: engine/divine-power.engine.ts:16
+Defined in: [engine/divine-power.engine.ts:16](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/divine-power.engine.ts#L16)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: engine/divine-power.engine.ts:16
 
 > **spawnVillage**(`x`, `y`, `name`): [`Kingdom`](../../../models/kingdom/interfaces/Kingdom.md) \| `null`
 
-Defined in: engine/divine-power.engine.ts:12
+Defined in: [engine/divine-power.engine.ts:12](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/divine-power.engine.ts#L12)
 
 #### Parameters
 
@@ -84,7 +84,7 @@ Defined in: engine/divine-power.engine.ts:12
 
 > **terraform**(`x`, `y`, `type`): `void`
 
-Defined in: engine/divine-power.engine.ts:8
+Defined in: [engine/divine-power.engine.ts:8](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/divine-power.engine.ts#L8)
 
 #### Parameters
 

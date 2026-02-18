@@ -6,7 +6,7 @@
 
 # Class: WorldService
 
-Defined in: services/worldservice.ts:6
+Defined in: [services/worldservice.ts:6](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/services/worldservice.ts#L6)
 
 ## Constructors
 
@@ -24,7 +24,7 @@ Defined in: services/worldservice.ts:6
 
 > `static` **getState**(): `object`
 
-Defined in: services/worldservice.ts:20
+Defined in: [services/worldservice.ts:20](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/services/worldservice.ts#L20)
 
 #### Returns
 
@@ -44,7 +44,7 @@ Defined in: services/worldservice.ts:20
 
 > `static` **spawnVillage**(`x`, `y`, `name`): [`Kingdom`](../../../models/kingdom/interfaces/Kingdom.md) \| `null`
 
-Defined in: services/worldservice.ts:12
+Defined in: [services/worldservice.ts:12](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/services/worldservice.ts#L12)
 
 #### Parameters
 
@@ -70,7 +70,7 @@ Defined in: services/worldservice.ts:12
 
 > `static` **terraform**(`x`, `y`, `type`): `void`
 
-Defined in: services/worldservice.ts:8
+Defined in: [services/worldservice.ts:8](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/services/worldservice.ts#L8)
 
 #### Parameters
 
@@ -96,7 +96,7 @@ Defined in: services/worldservice.ts:8
 
 > `static` **tick**(): `void`
 
-Defined in: services/worldservice.ts:16
+Defined in: [services/worldservice.ts:16](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/services/worldservice.ts#L16)
 
 #### Returns
 

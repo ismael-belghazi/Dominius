@@ -6,7 +6,7 @@
 
 # Interface: Tile
 
-Defined in: engine/world.engine.ts:3
+Defined in: [engine/world.engine.ts:3](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/world.engine.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: engine/world.engine.ts:3
 
 > **type**: [`TileType`](../type-aliases/TileType.md)
 
-Defined in: engine/world.engine.ts:6
+Defined in: [engine/world.engine.ts:6](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/world.engine.ts#L6)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: engine/world.engine.ts:6
 
 > **x**: `number`
 
-Defined in: engine/world.engine.ts:4
+Defined in: [engine/world.engine.ts:4](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/world.engine.ts#L4)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: engine/world.engine.ts:4
 
 > **y**: `number`
 
-Defined in: engine/world.engine.ts:5
+Defined in: [engine/world.engine.ts:5](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/world.engine.ts#L5)

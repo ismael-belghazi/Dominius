@@ -6,7 +6,7 @@
 
 # Interface: World
 
-Defined in: models/tile.ts:3
+Defined in: [models/tile.ts:3](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/tile.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: models/tile.ts:3
 
 > **divineEnergy**: `number`
 
-Defined in: models/tile.ts:5
+Defined in: [models/tile.ts:5](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/tile.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: models/tile.ts:5
 
 > **kingdoms**: [`Kingdom`](../../kingdom/interfaces/Kingdom.md)[]
 
-Defined in: models/tile.ts:6
+Defined in: [models/tile.ts:6](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/tile.ts#L6)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: models/tile.ts:6
 
 > **tick**: `number`
 
-Defined in: models/tile.ts:4
+Defined in: [models/tile.ts:4](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/tile.ts#L4)

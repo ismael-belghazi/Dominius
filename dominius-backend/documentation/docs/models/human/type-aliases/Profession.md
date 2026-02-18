@@ -8,4 +8,4 @@
 
 > **Profession** = `"Farmer"` \| `"Hunter"` \| `"Breeder"` \| `"Cook"` \| `"Teacher"` \| `"Doctor"`
 
-Defined in: models/human.ts:1
+Defined in: [models/human.ts:1](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/human.ts#L1)

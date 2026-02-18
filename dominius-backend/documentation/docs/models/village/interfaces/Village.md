@@ -6,7 +6,7 @@
 
 # Interface: Village
 
-Defined in: models/village.ts:6
+Defined in: [models/village.ts:6](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/village.ts#L6)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: models/village.ts:6
 
 > **id**: `number`
 
-Defined in: models/village.ts:7
+Defined in: [models/village.ts:7](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/village.ts#L7)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: models/village.ts:7
 
 > **infrastructures**: [`Infrastructure`](Infrastructure.md)[]
 
-Defined in: models/village.ts:12
+Defined in: [models/village.ts:12](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/village.ts#L12)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: models/village.ts:12
 
 > **name**: `string`
 
-Defined in: models/village.ts:8
+Defined in: [models/village.ts:8](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/village.ts#L8)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: models/village.ts:8
 
 > **population**: `number`
 
-Defined in: models/village.ts:11
+Defined in: [models/village.ts:11](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/village.ts#L11)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: models/village.ts:11
 
 > **x**: `number`
 
-Defined in: models/village.ts:9
+Defined in: [models/village.ts:9](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/village.ts#L9)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: models/village.ts:9
 
 > **y**: `number`
 
-Defined in: models/village.ts:10
+Defined in: [models/village.ts:10](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/models/village.ts#L10)

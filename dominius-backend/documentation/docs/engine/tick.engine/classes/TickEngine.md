@@ -6,7 +6,7 @@
 
 # Class: TickEngine
 
-Defined in: engine/tick.engine.ts:7
+Defined in: [engine/tick.engine.ts:7](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/tick.engine.ts#L7)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: engine/tick.engine.ts:7
 
 > **new TickEngine**(`game`): `TickEngine`
 
-Defined in: engine/tick.engine.ts:8
+Defined in: [engine/tick.engine.ts:8](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/tick.engine.ts#L8)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: engine/tick.engine.ts:8
 
 > **buildInfrastructure**(`village`, `type`): `void`
 
-Defined in: engine/tick.engine.ts:241
+Defined in: [engine/tick.engine.ts:241](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/tick.engine.ts#L241)
 
 #### Parameters
 
@@ -54,7 +54,7 @@ Defined in: engine/tick.engine.ts:241
 
 > **spawnAnimal**(`kingdom`, `animalType`): `void`
 
-Defined in: engine/tick.engine.ts:225
+Defined in: [engine/tick.engine.ts:225](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/tick.engine.ts#L225)
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Defined in: engine/tick.engine.ts:225
 
 > **tick**(): `void`
 
-Defined in: engine/tick.engine.ts:10
+Defined in: [engine/tick.engine.ts:10](https://github.com/ismael-belghazi/Dominius/blob/0a1ae78088d3117b064832932b6f4b6e4ef77781/dominius-backend/src/engine/tick.engine.ts#L10)
 
 #### Returns
 
