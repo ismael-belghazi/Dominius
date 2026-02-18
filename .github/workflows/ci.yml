@@ -62,15 +62,19 @@ jobs:
 
       - name: Build MkDocs Site
         run: |
-          cd dominius-backend/documentation  
+          cd dominius-backend/documentation
           mkdocs build --strict
 
       - name: Check if Documentation Changed
         id: check
         run: |
-          git add -A site
-          git diff --cached --quiet || echo "changed=true" >> $GITHUB_OUTPUT
-          echo "changed=false" >> $GITHUB_OUTPUT
+          cd dominius-backend/documentation
+          if [ -d "site" ] && [ "$(ls -A site)" ]; then
+            git add -A site
+            git diff --cached --quiet || echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Deploy MkDocs
         if: steps.check.outputs.changed == 'true'
