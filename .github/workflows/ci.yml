@@ -1,0 +1,66 @@
+name: Deploy Documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - backend
+      - master
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Cache pip and MkDocs
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: mkdocs-material-${{ runner.os }}-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: mkdocs-material-
+
+      - name: Install MkDocs and Theme
+        run: pip install mkdocs mkdocs-material
+
+      - name: Generate TypeScript Documentation
+        run: |
+          npx typedoc \
+            --plugin typedoc-plugin-markdown \
+            --entryPointStrategy expand \
+            --out ./documentation/docs \
+            "src/**/*.ts" \
+            --excludePrivate \
+            --excludeProtected \
+            --readme none
+
+      - name: Build MkDocs Site
+        run: mkdocs build --strict
+
+      - name: Check if Documentation Changed
+        id: check
+        run: |
+          git add -A site
+          git diff --cached --quiet || echo "changed=true" >> $GITHUB_OUTPUT
+          echo "changed=false" >> $GITHUB_OUTPUT
+
+      - name: Deploy MkDocs
+        if: steps.check.outputs.changed == 'true'
+        run: mkdocs gh-deploy --force --clean
+
+      - name: Skip Deployment
+        if: steps.check.outputs.changed == 'false'
+        run: echo "La documentation n'a pas changé, déploiement ignoré."

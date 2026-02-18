@@ -1,0 +1,9 @@
+site_name: Dominius Backend Documentation
+site_description: Documentation pour le backend de Dominius
+theme:
+  name: material
+
+plugins:
+  - search
+  - awesome-pages
+
