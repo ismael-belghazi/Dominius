@@ -22,7 +22,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - uses: actions/setup-python@v5
+      - name: Set up Node.js and Install Dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.19.0' 
+      - run: npm ci 
+
+      - name: Install Python
+        uses: actions/setup-python@v5
         with:
           python-version: 3.x
 
