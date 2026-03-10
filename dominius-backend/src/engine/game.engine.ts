@@ -31,7 +31,7 @@ export class GameEngine {
   // ===============================
   // ROYAUME
   // ===============================
-  spawnKingdom(name?: string, x?: number, y?: number): Kingdom {
+  spawnKingdom(name?: string): Kingdom {
     const kingdom: Kingdom = {
       id: this.getNextKingdomId(),
       name: name || `Kingdom-${Date.now()}`,
@@ -39,8 +39,6 @@ export class GameEngine {
       villages: [],
       animals: [],
       resources: { food: 1000, meat: 500 },
-      x: x ?? Math.floor(this.world.width / 2),
-      y: y ?? Math.floor(this.world.height / 2)
     };
     this.kingdoms.push(kingdom);
     console.log("Nouveau royaume créé :", kingdom);
@@ -85,11 +83,12 @@ export class GameEngine {
       x,
       y,
       population: 2,
-      infrastructures: []
+      infrastructures: [],
     };
 
     kingdom.villages.push(village);
 
+    // Ajout initial de 2 humains au village
     for (let i = 0; i < 2; i++) {
       kingdom.humans.push(this.createHuman(x, y, kingdom.id));
     }
@@ -154,6 +153,7 @@ export class GameEngine {
       Library: 60,
       Hospital: 70
     };
+
     const cost = costs[type];
     if (kingdom.resources.food < cost) return;
 
@@ -179,5 +179,5 @@ export class GameEngine {
   }
 }
 
-// Export de l’instance globale
+// Instance globale
 export const gameEngine = new GameEngine();

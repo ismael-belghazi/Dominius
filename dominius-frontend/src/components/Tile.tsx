@@ -6,6 +6,7 @@ interface Props {
   overlay: string[];
   onMouseEnter?: () => void;
   onMouseDown?: () => void;
+  onClick?: () => void; // <-- nouveau
 }
 
 const TILE_COLORS: Record<string, string> = {
@@ -15,19 +16,23 @@ const TILE_COLORS: Record<string, string> = {
   MOUNTAIN: "#888888",
 };
 
-export default function Tile({ tile, overlay, onMouseEnter, onMouseDown }: Props) {
+export default function Tile({ tile, overlay, onMouseEnter, onMouseDown, onClick }: Props) {
+  const iconSize = 10;
+
   return (
     <div
       className="tile"
       onMouseEnter={onMouseEnter}
       onMouseDown={onMouseDown}
+      onClick={onClick} 
       style={{
         width: 16,
         height: 16,
         background: TILE_COLORS[tile.type],
-        border: overlay.includes("human") || overlay.includes("village") ? "2px solid green" : "1px solid #222",
+        border: "1px solid #222",
         boxSizing: "border-box",
         position: "relative",
+        cursor: overlay.includes("human") ? "pointer" : "default"
       }}
     >
       {/* Humains */}
@@ -35,10 +40,11 @@ export default function Tile({ tile, overlay, onMouseEnter, onMouseDown }: Props
         <div
           style={{
             position: "absolute",
-            width: 10,
-            height: 10,
-            top: 1,
-            left: 1,
+            opacity: 0.8,
+            width: iconSize,
+            height: iconSize,
+            top: 2,
+            left: 2,
             backgroundColor: "blue",
             borderRadius: "50%",
           }}
@@ -50,24 +56,26 @@ export default function Tile({ tile, overlay, onMouseEnter, onMouseDown }: Props
         <div
           style={{
             position: "absolute",
-            width: 10,
-            height: 10,
-            top: 1,
-            right: 1,
+            opacity: 0.8,
+            width: iconSize,
+            height: iconSize,
+            top: 2,
+            right: 2,
             backgroundColor: "red",
             borderRadius: "50%",
           }}
         />
       )}
 
-      {/* Villages */}
+      {/* Village */}
       {overlay.includes("village") && (
         <div
           style={{
             position: "absolute",
-            width: 10,
-            height: 10,
-            bottom: 1,
+            opacity: 0.8,
+            width: iconSize,
+            height: iconSize,
+            bottom: 2,
             left: 3,
             backgroundColor: "yellow",
             borderRadius: "50%",

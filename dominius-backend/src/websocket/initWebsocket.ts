@@ -6,14 +6,14 @@ export function initWebsocket(io: Server) {
     console.log("Client connecté:", socket.id);
 
     // Envoi initial de l'état du monde
-    socket.emit("worldUpdate", gameEngine.getWorldState());
+    socket.emit("WORLD_UPDATE", gameEngine.getWorldState());
 
     // Initialisation du monde depuis le frontend
     socket.on("INIT_WORLD", ({ world }) => {
       if (world) {
         gameEngine.world.grid = world;
         console.log("World initialized from frontend");
-        io.emit("worldUpdate", gameEngine.getWorldState());
+        io.emit("WORLD_UPDATE", gameEngine.getWorldState());
       }
     });
 
@@ -31,12 +31,10 @@ export function initWebsocket(io: Server) {
           break;
 
         case "SPAWN_VILLAGE":
-          // Vérifie qu'il y a au moins un royaume
           if (gameEngine.kingdoms.length === 0) {
-            const kingdom = gameEngine.spawnKingdom(); // crée un royaume par défaut
+            const kingdom = gameEngine.spawnKingdom(); // royaume par défaut
             gameEngine.spawnVillageInternal(action.x, action.y, action.name!, kingdom.id);
           } else {
-            // Ajoute au premier royaume existant (ou tu peux choisir un royaume spécifique)
             gameEngine.spawnVillageInternal(action.x, action.y, action.name!, gameEngine.kingdoms[0].id);
           }
           break;
@@ -56,14 +54,14 @@ export function initWebsocket(io: Server) {
           });
           break;
       }
-
-      io.emit("worldUpdate", gameEngine.getWorldState());
+      // Pas besoin d’émettre ici si le tick automatique est actif
+      // io.emit("WORLD_UPDATE", gameEngine.getWorldState());
     });
   });
 
   // Tick automatique toutes les secondes
   setInterval(() => {
     gameEngine.tick();
-    io.emit("worldUpdate", gameEngine.getWorldState());
+    io.emit("WORLD_UPDATE", gameEngine.getWorldState());
   }, 1000);
 }

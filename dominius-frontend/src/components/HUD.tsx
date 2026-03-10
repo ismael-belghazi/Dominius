@@ -4,13 +4,14 @@ import { TileTypeName, DivineAction } from "../types/world";
 interface HUDProps {
   selectedTileType: TileTypeName;
   setSelectedTileType: (t: TileTypeName) => void;
-  selectedPower: DivineAction["type"];
-  setSelectedPower: (p: DivineAction["type"]) => void;
+  selectedPower: DivineAction["type"] | "INSPECT"; 
+  setSelectedPower: (p: DivineAction["type"] | "INSPECT") => void;
 }
 
 export default function HUD({ selectedTileType, setSelectedTileType, selectedPower, setSelectedPower }: HUDProps) {
   return (
     <div style={{ display:"flex", gap:"16px", marginBottom:"8px" }}>
+      
       <div>
         <strong>Terrain:</strong>
         {["GRASS","SAND","WATER","MOUNTAIN"].map(t=>(
@@ -21,6 +22,7 @@ export default function HUD({ selectedTileType, setSelectedTileType, selectedPow
           >{t}</button>
         ))}
       </div>
+
       <div>
         <strong>Pouvoir:</strong>
         {["TERRAFORM","SPAWN_VILLAGE","SPAWN_KINGDOM","SMITE","SPAWN_ANIMAL","BLESS"].map(p=>(
@@ -30,6 +32,11 @@ export default function HUD({ selectedTileType, setSelectedTileType, selectedPow
             onClick={()=>setSelectedPower(p as DivineAction["type"])}
           >{p}</button>
         ))}
+        {/* Nouveau bouton INSPECT */}
+        <button
+          style={{ backgroundColor: selectedPower==="INSPECT"?"#555":"#222", color:"#fff", margin:"2px" }}
+          onClick={()=>setSelectedPower("INSPECT")}
+        >INSPECT</button>
       </div>
     </div>
   );

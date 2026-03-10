@@ -26,8 +26,7 @@ export default function App() {
   });
 
   const [selectedTileType, setSelectedTileType] = useState<TileTypeName>("GRASS");
-  const [selectedPower, setSelectedPower] = useState<DivineAction["type"]>("TERRAFORM");
-
+  const [selectedPower, setSelectedPower] = useState<DivineAction["type"] | "INSPECT">("TERRAFORM");
   useEffect(()=>{
     socket.emit("INIT_WORLD",{ world: worldState.world });
 
@@ -57,7 +56,7 @@ export default function App() {
         selectedTileType={selectedTileType}
         selectedPower={selectedPower}
         onDivineAction={handleDivineAction}
-/>
+      />
     </div>
   );
 }
