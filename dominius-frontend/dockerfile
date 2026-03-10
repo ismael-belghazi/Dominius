@@ -1,0 +1,32 @@
+# =========================
+# Étape 1 : Build React
+# =========================
+FROM node:20 AS builder
+
+WORKDIR /app
+
+# Copier package.json et package-lock.json
+COPY package*.json ./
+
+# Installer toutes les dépendances (dev+prod)
+RUN npm install
+
+# Copier le code source
+COPY . .
+
+# Build React avec Vite
+RUN npm run build
+
+# =========================
+# Étape 2 : Serveur Nginx
+# =========================
+FROM nginx:alpine
+
+# Supprimer le contenu par défaut
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copier le build React dans Nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

@@ -13,18 +13,43 @@ export class GameEngine {
   private humanId = 1;
   private villageId = 1;
   private kingdomId = 1;
-  private animalId = 1; 
+  private animalId = 1;
 
   constructor() {
     this.world = new WorldEngine(50, 50);
     this.tickEngine = new TickEngine(this);
   }
 
-  getNextHumanId() { return this.humanId++; }
-  getNextVillageId() { return this.villageId++; }
-  getNextKingdomId() { return this.kingdomId++; }
-  getNextAnimalId() { return this.animalId++; }
+  // ===============================
+  // ID GENERATORS
+  // ===============================
+  private getNextHumanId(): number { return this.humanId++; }
+  private getNextVillageId(): number { return this.villageId++; }
+  private getNextKingdomId(): number { return this.kingdomId++; }
+  private getNextAnimalId(): number { return this.animalId++; }
 
+  // ===============================
+  // ROYAUME
+  // ===============================
+  spawnKingdom(name?: string): Kingdom {
+    const kingdom: Kingdom = {
+      id: this.getNextKingdomId(),
+      name: name || `Kingdom-${Date.now()}`,
+      humans: [],
+      villages: [],
+      animals: [],
+      resources: { food: 1000, meat: 500 },
+      x: undefined,
+      y: undefined
+    };
+    this.kingdoms.push(kingdom);
+    console.log("Nouveau royaume créé :", kingdom);
+    return kingdom;
+  }
+
+  // ===============================
+  // HUMANS
+  // ===============================
   createHuman(x: number, y: number, kingdomId: number): Human {
     return {
       id: this.getNextHumanId(),
@@ -34,7 +59,8 @@ export class GameEngine {
       age: 0,
       health: 100,
       hunger: 0,
-      profession: this.assignProfession()
+      profession: this.assignProfession(),
+      intelligence: 0
     };
   }
 
@@ -43,18 +69,15 @@ export class GameEngine {
     return professions[Math.floor(Math.random() * professions.length)];
   }
 
-  spawnVillageInternal(x: number, y: number, name: string) {
+  // ===============================
+  // VILLAGE
+  // ===============================
+  spawnVillageInternal(x: number, y: number, name: string, kingdomId: number): Village | null {
     const tile = this.world.getTile(x, y);
     if (!tile || tile.type === 'WATER') return null;
 
-    const kingdom: Kingdom = {
-      id: this.getNextKingdomId(),
-      name: `Kingdom-${Date.now()}`,
-      humans: [],
-      villages: [],
-      animals: [],
-      resources: { food: 0, meat: 0 }
-    };
+    const kingdom = this.kingdoms.find(k => k.id === kingdomId);
+    if (!kingdom) return null;
 
     const village: Village = {
       id: this.getNextVillageId(),
@@ -71,37 +94,29 @@ export class GameEngine {
       kingdom.humans.push(this.createHuman(x, y, kingdom.id));
     }
 
-    this.kingdoms.push(kingdom);
-    return kingdom;
+    return village;
   }
 
-  tick() {
-    this.tickEngine.tick();
+  // ===============================
+  // TERRAFORM
+  // ===============================
+  terraform(x: number, y: number, type: TileType): void {
+    const tile = this.world.getTile(x, y);
+    if (!tile) return;
+    tile.type = type;
   }
 
-  terraform(x: number, y: number, type: TileType) {
-    this.world.setTile(x, y, type);
-  }
-
-  getWorldState() {
-    return {
-      world: this.world.grid,
-      kingdoms: this.kingdoms
-    };
-  }
-
-  spawnAnimal(
+  // ===============================
+  // ANIMALS
+  // ===============================
+  createAnimal(
     kingdomId: number,
     animalType: 'Cow' | 'Sheep' | 'Pig' | 'Chicken' | 'Deer' | 'Rabbit' | 'Fish',
-    village?: Village
-  ) {
+    x: number,
+    y: number
+  ): Animal | null {
     const kingdom = this.kingdoms.find(k => k.id === kingdomId);
     if (!kingdom) return null;
-
-    if (!kingdom.animals) kingdom.animals = [];
-
-    const x = village ? village.x : 0;
-    const y = village ? village.y : 0;
 
     const animal: Animal = {
       id: this.getNextAnimalId(),
@@ -117,13 +132,20 @@ export class GameEngine {
     return animal;
   }
 
-  // Construction d'une infrastructure
+  // ===============================
+  // INFRASTRUCTURE
+  // ===============================
   buildInfrastructure(
-    village: Village,
+    villageId: number,
     type: 'Market' | 'Mill' | 'Barracks' | 'Library' | 'Hospital'
-  ) {
-    const kingdom = this.kingdoms.find(k => k.villages.includes(village));
-    if (!kingdom || !kingdom.resources) return;
+  ): void {
+    const kingdom = this.kingdoms.find(k =>
+      k.villages.some(v => v.id === villageId)
+    );
+    if (!kingdom) return;
+
+    const village = kingdom.villages.find(v => v.id === villageId);
+    if (!village) return;
 
     const costs: Record<string, number> = {
       Market: 50,
@@ -132,17 +154,30 @@ export class GameEngine {
       Library: 60,
       Hospital: 70
     };
-
     const cost = costs[type];
-    if (kingdom.resources.food >= cost) {
-      kingdom.resources.food -= cost;
-      const infrastructure: Infrastructure = { type, level: 1 };
-      village.infrastructures.push(infrastructure);
-      console.log(`${type} construite dans le village ${village.name}`);
-    } else {
-      console.log(`Pas assez de nourriture pour construire ${type} dans le village ${village.name}`);
-    }
+    if (kingdom.resources.food < cost) return;
+
+    kingdom.resources.food -= cost;
+    village.infrastructures.push({ type, level: 1 });
+  }
+
+  // ===============================
+  // TICK
+  // ===============================
+  tick(): void {
+    this.tickEngine.tick();
+  }
+
+  // ===============================
+  // WORLD STATE
+  // ===============================
+  getWorldState() {
+    return {
+      world: this.world.grid,
+      kingdoms: this.kingdoms
+    };
   }
 }
 
+// Export de l’instance globale
 export const gameEngine = new GameEngine();

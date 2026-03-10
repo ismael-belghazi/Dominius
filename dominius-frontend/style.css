@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #1e1e1e;
+  color: white;
+  display: flex;
+  height: 100vh;
+}
+
+#ui {
+  width: 250px;
+  padding: 15px;
+  background: #2c2c2c;
+  border-right: 2px solid #444;
+  overflow-y: auto;
+}
+
+#world {
+  display: grid;
+  flex: 1;
+  overflow: auto;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+.tile {
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+}
+
+.GRASS { background: #4caf50; }
+.SAND { background: #d2b48c; }
+.WATER { background: #2196f3; }
+.MOUNTAIN { background: #777; }
+
+.human { outline: 2px solid white; }
+.animal { outline: 2px solid yellow; }
+.village { outline: 2px solid red; }

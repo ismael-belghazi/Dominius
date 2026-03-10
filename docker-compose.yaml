@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./dominius-backend
+      dockerfile: Dockerfile
+    container_name: dominius-backend
+    ports:
+      - "3000:3000" # expose Express API
+    environment:
+      NODE_ENV: production
+
+  frontend:
+    build:
+      context: ./dominius-frontend
+      dockerfile: Dockerfile
+    container_name: dominius-frontend
+    ports:
+      - "8080:80" # port web
+    environment:
+      NODE_ENV: production

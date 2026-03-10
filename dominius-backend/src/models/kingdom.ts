@@ -12,4 +12,6 @@ export interface Kingdom {
     food: number;
     meat: number;
   };
+  x?: number;
+  y?: number;
 }
