@@ -8,10 +8,17 @@ interface Props {
   onClose: () => void;
 }
 
+// Types disponibles
 const TILE_TYPES: TileTypeName[] = ["GRASS", "SAND", "WATER", "MOUNTAIN"];
 const ANIMAL_TYPES = ["Cow", "Sheep", "Pig", "Chicken", "Deer", "Rabbit", "Fish"];
 
 export default function MenuDivin({ x, y, onClose }: Props) {
+  // Fonction pour émettre une action divine
+  const emitDivineAction = (action: object) => {
+    socket.emit("DIVINE_ACTION", action);
+    onClose();
+  };
+
   return (
     <div style={{
       position: "fixed",
@@ -22,7 +29,8 @@ export default function MenuDivin({ x, y, onClose }: Props) {
       padding: "8px",
       borderRadius: "4px",
       zIndex: 1000,
-      minWidth: "120px"
+      minWidth: "140px",
+      boxShadow: "0 0 10px rgba(0,0,0,0.5)"
     }}>
       {/* Terraform */}
       <strong style={{ display: "block", marginBottom: "4px" }}>Terraform</strong>
@@ -30,10 +38,7 @@ export default function MenuDivin({ x, y, onClose }: Props) {
         <div
           key={t}
           style={{ cursor: "pointer", padding: "4px" }}
-          onClick={() => { 
-            socket.emit("DIVINE_ACTION", { type: "TERRAFORM", x, y, tileType: t }); 
-            onClose(); 
-          }}
+          onClick={() => emitDivineAction({ type: "TERRAFORM", x, y, tileType: t })}
         >
           {t}
         </div>
@@ -44,10 +49,7 @@ export default function MenuDivin({ x, y, onClose }: Props) {
       {/* Spawn Village */}
       <div
         style={{ cursor: "pointer", padding: "4px", color: "yellow" }}
-        onClick={() => { 
-          socket.emit("DIVINE_ACTION", { type: "SPAWN_VILLAGE", x, y, name: `Village-${Date.now()}` }); 
-          onClose(); 
-        }}
+        onClick={() => emitDivineAction({ type: "SPAWN_VILLAGE", x, y, name: `Village-${Date.now()}` })}
       >
         Spawn Village
       </div>
@@ -55,18 +57,17 @@ export default function MenuDivin({ x, y, onClose }: Props) {
       {/* Spawn Kingdom */}
       <div
         style={{ cursor: "pointer", padding: "4px", color: "orange" }}
-        onClick={() => { 
-          socket.emit("DIVINE_ACTION", { 
-            type: "SPAWN_KINGDOM", 
-            name: `Kingdom-${Date.now()}`,
-            x,   // coordonnées pour la visualisation
-            y
-          }); 
-          onClose(); 
-        }}
+        onClick={() => emitDivineAction({ 
+          type: "SPAWN_KINGDOM", 
+          name: `Kingdom-${Date.now()}`,
+          x,  
+          y
+        })}
       >
         Spawn Kingdom
       </div>
+
+      <hr style={{ borderColor: "#444", margin: "6px 0" }} />
 
       {/* Spawn Animal */}
       <strong style={{ display: "block", marginTop: "6px", marginBottom: "4px" }}>Spawn Animal</strong>
@@ -74,10 +75,7 @@ export default function MenuDivin({ x, y, onClose }: Props) {
         <div
           key={a}
           style={{ cursor: "pointer", padding: "4px", color: "lightgreen" }}
-          onClick={() => { 
-            socket.emit("DIVINE_ACTION", { type: "SPAWN_ANIMAL", kingdomId: 1, animalType: a, x, y }); 
-            onClose(); 
-          }}
+          onClick={() => emitDivineAction({ type: "SPAWN_ANIMAL", x, y, animalType: a })}
         >
           {a}
         </div>

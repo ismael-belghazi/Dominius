@@ -52,12 +52,12 @@ export default function App() {
         setSelectedPower={setSelectedPower}
       />
       <Grid
-        world={worldState.world}
-        kingdoms={worldState.kingdoms}
+        initialWorld={worldState.world}
+        initialKingdoms={worldState.kingdoms}
         selectedTileType={selectedTileType}
         selectedPower={selectedPower}
         onDivineAction={handleDivineAction}
-      />
+/>
     </div>
   );
 }

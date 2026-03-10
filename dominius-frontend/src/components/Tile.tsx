@@ -25,7 +25,7 @@ export default function Tile({ tile, overlay, onMouseEnter, onMouseDown }: Props
         width: 16,
         height: 16,
         background: TILE_COLORS[tile.type],
-        border: "1px solid #222",
+        border: overlay.includes("human") || overlay.includes("village") ? "2px solid green" : "1px solid #222",
         boxSizing: "border-box",
         position: "relative",
       }}
@@ -35,10 +35,10 @@ export default function Tile({ tile, overlay, onMouseEnter, onMouseDown }: Props
         <div
           style={{
             position: "absolute",
-            width: "50%",
-            height: "50%",
-            top: "0%",
-            left: "0%",
+            width: 10,
+            height: 10,
+            top: 1,
+            left: 1,
             backgroundColor: "blue",
             borderRadius: "50%",
           }}
@@ -50,39 +50,31 @@ export default function Tile({ tile, overlay, onMouseEnter, onMouseDown }: Props
         <div
           style={{
             position: "absolute",
-            width: "50%",
-            height: "50%",
-            top: "0%",
-            right: "0%",
+            width: 10,
+            height: 10,
+            top: 1,
+            right: 1,
             backgroundColor: "red",
             borderRadius: "50%",
           }}
         />
       )}
 
-      {/* Village – seulement au hover */}
+      {/* Villages */}
       {overlay.includes("village") && (
         <div
-          className="village-overlay"
           style={{
             position: "absolute",
-            width: "50%",
-            height: "50%",
-            bottom: "0%",
-            left: "25%",
+            width: 10,
+            height: 10,
+            bottom: 1,
+            left: 3,
             backgroundColor: "yellow",
             borderRadius: "50%",
-            opacity: 0,
-            transition: "opacity 0.2s",
+            border: "1px solid #aaa"
           }}
         />
       )}
-
-      <style>{`
-        .tile:hover .village-overlay {
-          opacity: 1;
-        }
-      `}</style>
     </div>
   );
 }

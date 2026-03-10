@@ -1,7 +1,7 @@
 import { WorldEngine, TileType } from './world.engine';
 import { Kingdom } from '../models/kingdom';
 import { Human, Profession } from '../models/human';
-import { Village, Infrastructure } from '../models/village';
+import { Village } from '../models/village';
 import { TickEngine } from './tick.engine';
 import { Animal } from '../models/Animal';
 
@@ -31,7 +31,7 @@ export class GameEngine {
   // ===============================
   // ROYAUME
   // ===============================
-  spawnKingdom(name?: string): Kingdom {
+  spawnKingdom(name?: string, x?: number, y?: number): Kingdom {
     const kingdom: Kingdom = {
       id: this.getNextKingdomId(),
       name: name || `Kingdom-${Date.now()}`,
@@ -39,8 +39,8 @@ export class GameEngine {
       villages: [],
       animals: [],
       resources: { food: 1000, meat: 500 },
-      x: undefined,
-      y: undefined
+      x: x ?? Math.floor(this.world.width / 2),
+      y: y ?? Math.floor(this.world.height / 2)
     };
     this.kingdoms.push(kingdom);
     console.log("Nouveau royaume créé :", kingdom);
