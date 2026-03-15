@@ -6,48 +6,148 @@ import { Animal } from '../models/Animal';
 import { TileType } from './world.engine';
 
 export class DivinePowerEngine {
+
+  faith: number = 1000; // points de foi initiaux
+
   constructor(private readonly game = gameEngine) {}
 
-  // Change le type d'une case
-  terraform(x: number, y: number, type: TileType): void {
+  // =========================
+  // UTILITAIRE
+  // =========================
+  private spendFaith(cost: number): boolean {
+    if (this.faith < cost) return false;
+    this.faith -= cost;
+    return true;
+  }
+
+  // =========================
+  // TERRAFORM
+  // =========================
+  terraform(x: number, y: number, type: TileType): boolean {
+    const cost = 5;
+    if (!this.spendFaith(cost)) return false;
     this.game.terraform(x, y, type);
+    return true;
   }
 
-  // Crée un village dans un royaume existant
+  // =========================
+  // SPAWN KINGDOM
+  // =========================
+  spawnKingdom(name: string, x: number, y: number): Kingdom | null {
+    if (x === undefined || y === undefined) {
+      console.error("spawnKingdom requires explicit x and y coordinates");
+      return null;
+    }
+
+    const cost = 200;
+    if (!this.spendFaith(cost)) return null;
+
+    const kingdomName = name || `Kingdom-${Date.now()}`;
+
+    // Création du royaume exactement sur la case cliquée
+    const newKingdom = this.game.spawnKingdom(kingdomName, x, y);
+    if (!newKingdom) {
+      console.error("Impossible de créer le royaume divine");
+      return null;
+    }
+
+    // Création du village capital sur la case cliquée
+    const capital = this.game.spawnVillageInternal(x, y, `${kingdomName}-Capital`, newKingdom.id);
+    if (!capital) console.error("Impossible de créer le village capital");
+
+    console.log(`[DivinePowerEngine] Royaume créé: ${kingdomName} à (${x},${y})`);
+    return newKingdom;
+  }
+
+  // =========================
+  // SPAWN VILLAGE
+  // =========================
   spawnVillage(x: number, y: number, name: string, kingdomId: number): Village | null {
-    const village = this.game.spawnVillageInternal(x, y, name, kingdomId);
-    return village;
+    const kingdom = this.game.kingdoms.find(k => k.id === kingdomId);
+    if (!kingdom) return null;
+
+    const cost = kingdom.villages.length === 0 ? 0 : 40;
+    if (!this.spendFaith(cost)) return null;
+
+    return this.game.spawnVillageInternal(x, y, name, kingdomId);
   }
 
-  // Crée un royaume à la volée
-  spawnKingdom(name?: string): Kingdom {
-    return this.game.spawnKingdom(name);
+  // =========================
+  // SPAWN ANIMAL
+  // =========================
+  spawnAnimal(kingdomId: number, type: Animal['type'], x: number, y: number): Animal | null {
+    const cost = 10;
+    if (!this.spendFaith(cost)) return null;
+    return this.game.createAnimal(kingdomId, type, x, y);
   }
 
-  // Frappe divine dans un rayon autour d'un point
-  smite(x: number, y: number, radius: number): void {
-    this.game.kingdoms.forEach((k: Kingdom) => {
-      // Supprime les humains
-      k.humans = k.humans.filter((h: Human) => Math.hypot(h.x - x, h.y - y) > radius);
-      // Supprime les villages
-      k.villages = k.villages.filter((v: Village) => Math.hypot(v.x - x, v.y - y) > radius);
-      // Supprime les animaux
-      k.animals = k.animals.filter((a: Animal) => Math.hypot(a.x - x, a.y - y) > radius);
+  // =========================
+  // SMITE
+  // =========================
+  smite(x: number, y: number): boolean {
+    const cost = 50;
+    if (!this.spendFaith(cost)) return false;
+
+    this.game.kingdoms.forEach(k => {
+      k.humans = k.humans.filter(h => !(h.x === x && h.y === y));
+      k.animals = k.animals.filter(a => !(a.x === x && a.y === y));
+      k.villages = k.villages.filter(v => !(v.x === x && v.y === y));
     });
+
+    return true;
   }
 
-  // Fait apparaître un animal dans un royaume (optionnel depuis un village)
-  spawnAnimal(
-    kingdomId: number,
-    type: Animal['type'],
-    village?: Village
-  ): Animal | null {
-    const k = this.game.kingdoms.find((k: Kingdom) => k.id === kingdomId);
-    if (!k) return null;
+  // =========================
+  // HEAL
+  // =========================
+  heal(x: number, y: number): boolean {
+    const cost = 25;
+    if (!this.spendFaith(cost)) return false;
 
-    const spawnX = village?.x ?? 0;
-    const spawnY = village?.y ?? 0;
+    this.game.kingdoms.forEach(k => {
+      k.humans.forEach(h => {
+        if (Math.abs(h.x - x) <= 2 && Math.abs(h.y - y) <= 2) {
+          h.health = Math.min(100, h.health + 30);
+        }
+      });
+    });
 
-    return this.game.createAnimal(k.id, type, spawnX, spawnY);
+    return true;
+  }
+
+  // =========================
+  // BLESS
+  // =========================
+  bless(x: number, y: number): boolean {
+    const cost = 30;
+    if (!this.spendFaith(cost)) return false;
+
+    this.game.kingdoms.forEach(k => {
+      k.humans.forEach(h => {
+        if (Math.abs(h.x - x) <= 2 && Math.abs(h.y - y) <= 2) {
+          h.intelligence = (h.intelligence || 0) + 10;
+        }
+      });
+    });
+
+    return true;
+  }
+
+  // =========================
+  // PLAGUE
+  // =========================
+  plague(x: number, y: number): boolean {
+    const cost = 60;
+    if (!this.spendFaith(cost)) return false;
+
+    this.game.kingdoms.forEach(k => {
+      k.humans.forEach(h => {
+        if (Math.abs(h.x - x) <= 2 && Math.abs(h.y - y) <= 2) {
+          h.health -= 30;
+        }
+      });
+    });
+
+    return true;
   }
 }

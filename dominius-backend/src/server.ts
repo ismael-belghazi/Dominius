@@ -7,15 +7,45 @@ import worldRoutes from './routes/worldRoutes';
 import errorHandler from './middleware/errorHandler';
 import { DivinePowerEngine } from './engine/divine-power.engine';
 
+// ----------------------
+// TYPES SUPPLÉMENTAIRES
+// ----------------------
+export interface Village {
+  id: number;
+  name: string;
+  food: number;
+  population: number;
+}
+
+export interface Tile {
+  x: number;
+  y: number;
+  type: 'GRASS' | 'SAND' | 'WATER' | 'MOUNTAIN';
+  village?: Village;
+  kingdomId?: number;
+}
+
+type AnimalType = "Cow" | "Sheep" | "Pig" | "Chicken" | "Deer" | "Rabbit" | "Fish";
+
+type DivineAction = 
+  | { type: 'TERRAFORM'; x: number; y: number; tileType: Tile['type'] }
+  | { type: 'SPAWN_VILLAGE'; x: number; y: number; name: string }
+  | { type: 'SMITE'; x: number; y: number; radius: number }
+  | { type: 'SPAWN_ANIMAL'; x: number; y: number; kingdomId: number; animalType: AnimalType }
+  | { type: 'BLESS' | 'heal' | 'plague'; kingdomId: number }
+  | { type: 'SPAWN_KINGDOM'; name?: string; x: number; y: number }
+  | { type: 'rain'; };
+
+// ----------------------
+// INIT
+// ----------------------
 const app = express();
 const divineEngine = new DivinePowerEngine(gameEngine);
 
-// middleware JSON + routes REST
 app.use(express.json());
 app.use('/api/world', worldRoutes);
 app.use(errorHandler);
 
-// frontend
 const frontendDir = path.join(__dirname, '..', 'frontend');
 app.use(express.static(frontendDir));
 app.get('/', (_req, res) => {
@@ -25,9 +55,9 @@ app.get('/', (_req, res) => {
 const httpServer = createServer(app);
 const io = new Server(httpServer, { cors: { origin: '*' } });
 
-// ======================
-// GAME LOOP GLOBAL
-// ======================
+// ----------------------
+// GAME LOOP
+// ----------------------
 let tickCount = 0;
 setInterval(() => {
   tickCount++;
@@ -35,7 +65,6 @@ setInterval(() => {
   const state = gameEngine.getWorldState();
   io.emit('WORLD_UPDATE', state);
 
-  // log résumé du monde pour debugging
   console.log(`\n[tick ${tickCount}] royaume(s)=${state.kingdoms.length}`);
   state.kingdoms.forEach(k => {
     console.log(
@@ -44,25 +73,24 @@ setInterval(() => {
   });
 }, 1000);
 
-// ======================
-// WEBSOCKET
-// ======================
+// ----------------------
+// SOCKET.IO
+// ----------------------
 io.on('connection', (socket) => {
   console.log('Client connecté:', socket.id);
   socket.emit('WORLD_INIT', gameEngine.getWorldState());
 
-  socket.on('DIVINE_ACTION', (action: any) => {
+  socket.on('DIVINE_ACTION', (action: DivineAction) => {
     try {
       console.log('Action divine reçue :', action);
       handleDivineAction(action);
-      const state = gameEngine.getWorldState();
-      socket.emit('WORLD_UPDATE', state);
+      io.emit('WORLD_UPDATE', gameEngine.getWorldState());
     } catch (error) {
-      console.error('Erreur lors de l\'exécution de l\'action divine:', error);
+      console.error('Erreur action divine:', error);
     }
   });
 
-  socket.on('SET_MAP', (grid: any[]) => {
+  socket.on('SET_MAP', (grid: Tile[][]) => {
     console.log('Carte reçue du client, dimensions', grid.length, 'x', grid[0]?.length);
     if (Array.isArray(grid) && grid.length > 0) {
       gameEngine.world.grid = grid;
@@ -77,62 +105,75 @@ io.on('connection', (socket) => {
   });
 });
 
-// ======================
+// ----------------------
 // DIVINE ACTION HANDLER
-// ======================
-function handleDivineAction(action: any) {
-  if (!action || typeof action.x !== 'number' || typeof action.y !== 'number') {
-    throw new Error('Action divine malformée, x et y doivent être des nombres');
-  }
-
+// ----------------------
+function handleDivineAction(action: DivineAction) {
   switch(action.type) {
     case 'TERRAFORM':
-      if (!action.tileType) throw new Error('Action TERRAFORM manquante de tileType');
       gameEngine.terraform(action.x, action.y, action.tileType);
       break;
 
-    case 'SPAWN_VILLAGE':
-      if (!action.name) throw new Error('Action SPAWN_VILLAGE manquante de name');
-
-      // Assure qu'il y a un royaume pour accueillir le village
+    case 'SPAWN_VILLAGE': {
       let kingdomId: number;
       if (gameEngine.kingdoms.length === 0) {
-        const newKingdom = divineEngine.spawnKingdom();
+        const newKingdom = divineEngine.spawnKingdom(`Kingdom-${Date.now()}`, action.x, action.y);
+        if (!newKingdom) throw new Error('Impossible de créer un royaume');
         kingdomId = newKingdom.id;
+        if (!gameEngine.kingdoms.includes(newKingdom)) gameEngine.kingdoms.push(newKingdom);
       } else {
         kingdomId = gameEngine.kingdoms[0].id;
       }
-
-      const kingdom = gameEngine.spawnVillageInternal(action.x, action.y, action.name, kingdomId);
-      console.log('spawnVillageInternal returned', kingdom);
+      gameEngine.spawnVillageInternal(action.x, action.y, action.name, kingdomId);
       break;
+    }
 
     case 'SMITE':
-      if (!action.radius) throw new Error('Action SMITE manquante de radius');
+      if (!action.radius) throw new Error('Action SMITE sans radius');
       gameEngine.kingdoms.forEach(k => {
-        k.humans = k.humans.filter(h => Math.hypot(h.x-action.x, h.y-action.y) > action.radius);
-        k.villages = k.villages.filter(v => Math.hypot(v.x-action.x, v.y-action.y) > action.radius);
-        k.animals = k.animals.filter(a => Math.hypot(a.x-action.x, a.y-action.y) > action.radius);
+        k.humans = k.humans.filter(h => Math.hypot(h.x - action.x, h.y - action.y) > action.radius);
+        k.villages = k.villages.filter(v => Math.hypot(v.x - action.x, v.y - action.y) > action.radius);
+        k.animals = k.animals.filter(a => Math.hypot(a.x - action.x, a.y - action.y) > action.radius);
       });
       break;
 
     case 'SPAWN_ANIMAL':
-      if (typeof action.kingdomId !== 'number' || !action.animalType) throw new Error('Action SPAWN_ANIMAL malformée');
-      const res = gameEngine.createAnimal(action.kingdomId, action.animalType, action.x, action.y);
-      console.log('spawnAnimal result', res);
+      gameEngine.createAnimal(action.kingdomId, action.animalType, action.x, action.y);
       break;
 
     case 'BLESS':
-      if (typeof action.kingdomId !== 'number') throw new Error('Action BLESS malformée');
-      const k = gameEngine.kingdoms.find(x => x.id === action.kingdomId);
-      if (k) k.humans.forEach(h => { h.hunger = Math.max(0, h.hunger - 20); });
+    case 'heal':
+    case 'plague': {
+      const kingdom = gameEngine.kingdoms.find(k => k.id === action.kingdomId);
+      if (!kingdom) return;
+      const delta = action.type === 'plague' ? 20 : -20;
+      kingdom.humans.forEach(h => h.hunger = Math.max(0, Math.min(100, h.hunger + delta)));
+      kingdom.animals?.forEach(a => a.hunger = Math.max(0, Math.min(100, a.hunger + delta)));
       break;
+    }
+
+    case 'SPAWN_KINGDOM': {
+      if (action.x === undefined || action.y === undefined) {
+        console.error('SPAWN_KINGDOM requires x and y coordinates');
+        return;
+      }
+        const newKingdom = divineEngine.spawnKingdom(action.name || `Kingdom-${Date.now()}`, action.x, action.y);      if (!newKingdom) {
+        console.error('Impossible de créer le royaume divine');
+        return;
+      }
+      if (!gameEngine.kingdoms.includes(newKingdom)) gameEngine.kingdoms.push(newKingdom);
+      console.log(`[DIVINE] Royaume créé: ${newKingdom.name} avec id=${newKingdom.id} à (${action.x},${action.y})`);
+      break;
+    }
 
     default:
-      throw new Error('Type d\'action divin non reconnu');
+      throw new Error('Type d\'action divine non reconnu');
   }
 }
 
+// ----------------------
+// SERVER LISTEN
+// ----------------------
 httpServer.listen(3000, () => {
   console.log('Serveur en écoute sur le port 3000');
 });

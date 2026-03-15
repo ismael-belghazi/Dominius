@@ -8,36 +8,75 @@ interface HUDProps {
   setSelectedPower: (p: DivineAction["type"] | "INSPECT") => void;
 }
 
-export default function HUD({ selectedTileType, setSelectedTileType, selectedPower, setSelectedPower }: HUDProps) {
+// Constantes typées
+const TILE_TYPES: TileTypeName[] = ["GRASS","SAND","WATER","MOUNTAIN"];
+const DIVINE_POWERS: DivineAction["type"][] = ["TERRAFORM","SPAWN_VILLAGE","SPAWN_KINGDOM","SMITE","SPAWN_ANIMAL","BLESS"];
+
+export default function HUD({
+  selectedTileType,
+  setSelectedTileType,
+  selectedPower,
+  setSelectedPower
+}: HUDProps) {
   return (
-    <div style={{ display:"flex", gap:"16px", marginBottom:"8px" }}>
+    <div style={{ display:"flex", gap:16, marginBottom:8 }}>
       
       <div>
         <strong>Terrain:</strong>
-        {["GRASS","SAND","WATER","MOUNTAIN"].map(t=>(
+        {TILE_TYPES.map(t => (
           <button
             key={t}
-            style={{ backgroundColor: selectedTileType===t?"#555":"#222", color:"#fff", margin:"2px" }}
-            onClick={()=>setSelectedTileType(t as TileTypeName)}
-          >{t}</button>
+            style={{
+              backgroundColor: selectedTileType === t ? "#555" : "#222",
+              color: "#fff",
+              margin: 2,
+              padding: "4px 8px",
+              border: "none",
+              borderRadius: 4,
+              cursor: "pointer"
+            }}
+            onClick={() => setSelectedTileType(t)}
+          >
+            {t}
+          </button>
         ))}
       </div>
 
       <div>
         <strong>Pouvoir:</strong>
-        {["TERRAFORM","SPAWN_VILLAGE","SPAWN_KINGDOM","SMITE","SPAWN_ANIMAL","BLESS"].map(p=>(
+        {DIVINE_POWERS.map(p => (
           <button
             key={p}
-            style={{ backgroundColor: selectedPower===p?"#555":"#222", color:"#fff", margin:"2px" }}
-            onClick={()=>setSelectedPower(p as DivineAction["type"])}
-          >{p}</button>
+            style={{
+              backgroundColor: selectedPower === p ? "#555" : "#222",
+              color: "#fff",
+              margin: 2,
+              padding: "4px 8px",
+              border: "none",
+              borderRadius: 4,
+              cursor: "pointer"
+            }}
+            onClick={() => setSelectedPower(p)}
+          >
+            {p}
+          </button>
         ))}
-        {/* Nouveau bouton INSPECT */}
         <button
-          style={{ backgroundColor: selectedPower==="INSPECT"?"#555":"#222", color:"#fff", margin:"2px" }}
-          onClick={()=>setSelectedPower("INSPECT")}
-        >INSPECT</button>
+          style={{
+            backgroundColor: selectedPower === "INSPECT" ? "#555" : "#222",
+            color: "#fff",
+            margin: 2,
+            padding: "4px 8px",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer"
+          }}
+          onClick={() => setSelectedPower("INSPECT")}
+        >
+          INSPECT
+        </button>
       </div>
+
     </div>
   );
 }

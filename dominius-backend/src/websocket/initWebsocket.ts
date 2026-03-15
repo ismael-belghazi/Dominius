@@ -1,67 +1,133 @@
 import { Server, Socket } from "socket.io";
 import { gameEngine } from "../engine/game.engine";
+import { DivinePowerEngine } from "../engine/divine-power.engine";
+
+const divineEngine = new DivinePowerEngine();
+let divinePoints = 0;
 
 export function initWebsocket(io: Server) {
+
   io.on("connection", (socket: Socket) => {
     console.log("Client connecté:", socket.id);
 
-    // Envoi initial de l'état du monde
-    socket.emit("WORLD_UPDATE", gameEngine.getWorldState());
-
-    // Initialisation du monde depuis le frontend
-    socket.on("INIT_WORLD", ({ world }) => {
-      if (world) {
-        gameEngine.world.grid = world;
-        console.log("World initialized from frontend");
-        io.emit("WORLD_UPDATE", gameEngine.getWorldState());
-      }
+    // =========================
+    // WORLD INIT
+    // =========================
+    socket.emit("WORLD_UPDATE", {
+      ...gameEngine.getWorldState(),
+      divinePoints
     });
 
-    // Actions divines
+    socket.on("INIT_WORLD", ({ world }) => {
+      if (!world) return;
+      gameEngine.world.grid = world;
+      console.log("World initialized from frontend");
+      io.emit("WORLD_UPDATE", {
+        ...gameEngine.getWorldState(),
+        divinePoints
+      });
+    });
+
+    // =========================
+    // DIVINE ACTIONS
+    // =========================
     socket.on("DIVINE_ACTION", (action) => {
+
+      const x = Number(action.x);
+      const y = Number(action.y);
+
       switch (action.type) {
-        case "TERRAFORM":
-          if (action.tileType !== undefined) {
-            gameEngine.world.setTile(action.x, action.y, action.tileType);
+
+        case "TERRAFORM": {
+          if (divinePoints < 1 || isNaN(x) || isNaN(y)) return;
+          divineEngine.terraform(x, y, action.tileType);
+          divinePoints -= 1;
+          break;
+        }
+
+        case "SPAWN_KINGDOM": {
+          if (divinePoints < 20 || isNaN(x) || isNaN(y)) return;
+
+          const newKingdom = divineEngine.spawnKingdom(action.name, x, y);
+          if (!newKingdom) {
+            console.error("Impossible de créer le royaume divine");
+            return;
           }
-          break;
 
-        case "SPAWN_KINGDOM":
-          gameEngine.spawnKingdom(action.name);
+          divinePoints -= 20;
+          console.log(`[DIVINE] Royaume créé: ${newKingdom.name} avec id=${newKingdom.id} à (${x},${y})`);
           break;
+        }
 
-        case "SPAWN_VILLAGE":
+        case "SPAWN_VILLAGE": {
+          if (isNaN(x) || isNaN(y)) return;
+
+          let kingdomId: number;
           if (gameEngine.kingdoms.length === 0) {
-            const kingdom = gameEngine.spawnKingdom(); // royaume par défaut
-            gameEngine.spawnVillageInternal(action.x, action.y, action.name!, kingdom.id);
+            const k = divineEngine.spawnKingdom("First Kingdom", x, y);
+            if (!k) return;
+            kingdomId = k.id;
           } else {
-            gameEngine.spawnVillageInternal(action.x, action.y, action.name!, gameEngine.kingdoms[0].id);
+            kingdomId = gameEngine.kingdoms[0].id;
           }
-          break;
 
-        case "SPAWN_ANIMAL":
+          const village = divineEngine.spawnVillage(
+            x,
+            y,
+            action.name || "Village",
+            kingdomId
+          );
+          if (!village) return;
+
+          if (gameEngine.kingdoms.length > 1) divinePoints -= 10;
+          break;
+        }
+
+        case "SPAWN_ANIMAL": {
+          if (divinePoints < 2 || isNaN(x) || isNaN(y)) return;
           if (action.kingdomId !== undefined && action.animalType !== undefined) {
-            gameEngine.createAnimal(action.kingdomId, action.animalType, action.x, action.y);
+            divineEngine.spawnAnimal(
+              action.kingdomId,
+              action.animalType,
+              x,
+              y
+            );
+            divinePoints -= 2;
           }
           break;
+        }
 
-        case "SMITE":
-          const radius = action.radius ?? 0;
-          gameEngine.kingdoms.forEach((k) => {
-            k.humans = k.humans.filter(h => Math.hypot(h.x - action.x, h.y - action.y) > radius);
-            k.villages = k.villages.filter(v => Math.hypot(v.x - action.x, v.y - action.y) > radius);
-            k.animals = k.animals.filter(a => Math.hypot(a.x - action.x, a.y - action.y) > radius);
-          });
+        case "SMITE": {
+          if (divinePoints < 15 || isNaN(x) || isNaN(y)) return;
+          divineEngine.smite(x, y);
+          divinePoints -= 15;
           break;
+        }
+
       }
-      // Pas besoin d’émettre ici si le tick automatique est actif
-      // io.emit("WORLD_UPDATE", gameEngine.getWorldState());
+
+      io.emit("WORLD_UPDATE", {
+        ...gameEngine.getWorldState(),
+        divinePoints
+      });
     });
   });
 
-  // Tick automatique toutes les secondes
+  // =========================
+  // GAME TICK
+  // =========================
   setInterval(() => {
     gameEngine.tick();
-    io.emit("WORLD_UPDATE", gameEngine.getWorldState());
+
+    const population = gameEngine.kingdoms.reduce(
+      (acc, k) => acc + k.humans.length,
+      0
+    );
+    divinePoints += population * 0.02;
+
+    io.emit("WORLD_UPDATE", {
+      ...gameEngine.getWorldState(),
+      divinePoints
+    });
   }, 1000);
 }

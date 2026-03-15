@@ -12,7 +12,10 @@ function createInitialWorld(): Tile[][] {
   for(let y=0;y<HEIGHT;y++){
     const row: Tile[] = [];
     for(let x=0;x<WIDTH;x++){
-      row.push({ x, y, type:"GRASS" });
+      row.push({
+        x, y, type: "GRASS",
+        kingdomId: 0
+      });
     }
     world.push(row);
   }
