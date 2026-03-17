@@ -4,33 +4,18 @@
   box-sizing: border-box;
   border: 1px solid #222;
   position: relative;
-  transition: transform 0.1s, box-shadow 0.2s;
+  image-rendering: pixelated;
 }
 
 .tile:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+  z-index: 2;
 }
 
-.GRASS { background: #4caf50; }
-.SAND { background: #d2b48c; }
-.WATER { background: #2196f3; }
-.MOUNTAIN { background: #777; }
-
-.human {
-  outline: 2px solid white;
-  border-radius: 50%;
-  transition: all 0.2s;
-}
-
-.animal {
-  outline: 2px solid yellow;
-  border-radius: 50%;
-  transition: all 0.2s;
-}
-
-.village {
-  outline: 2px solid red;
-  border-radius: 50%;
-  transition: all 0.2s;
+/* conteneur des entités */
+.entity {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  pointer-events: none;
 }
