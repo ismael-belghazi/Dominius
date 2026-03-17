@@ -1,5 +1,4 @@
 import React from "react";
-import { TileTypeName } from "../types/world";
 import { socket } from "../engine/socket";
 import styles from "./MenuDivin.module.css";
 
@@ -10,7 +9,11 @@ interface Props {
 }
 
 const TILE_TYPES: TileTypeName[] = ["GRASS", "SAND", "WATER", "MOUNTAIN"];
-const ANIMAL_TYPES = ["Cow", "Sheep", "Pig", "Chicken", "Deer", "Rabbit", "Fish"];
+const ANIMAL_TYPES: AnimalType[] = ["Cow", "Sheep", "Pig", "Chicken", "Deer", "Rabbit", "Fish"];
+const DIVINE_ACTIONS: { type: Exclude<DivineAction["type"], "TERRAFORM" | "SPAWN_VILLAGE" | "SPAWN_ANIMAL">; label: string; cost?: number }[] = [
+  { type: "SMITE", label: "Smite (15 pts)", cost: 15 },
+  { type: "BLESS", label: "Bless (5 pts)", cost: 5 },
+];
 
 export default function MenuDivin({ x, y, onClose }: Props) {
   const emitDivineAction = (action: object) => {
@@ -28,7 +31,7 @@ export default function MenuDivin({ x, y, onClose }: Props) {
           className={`${styles.item} ${styles.tile}`}
           onClick={() => emitDivineAction({ type: "TERRAFORM", x, y, tileType: t })}
         >
-          {t}
+          {t} (1 pt)
         </div>
       ))}
 
@@ -39,7 +42,7 @@ export default function MenuDivin({ x, y, onClose }: Props) {
         className={`${styles.item} ${styles.village}`}
         onClick={() => emitDivineAction({ type: "SPAWN_VILLAGE", x, y, name: `Village-${Date.now()}` })}
       >
-        Spawn Village
+        Spawn Village (10 pts, 1er gratuit)
       </div>
 
       <div
@@ -64,6 +67,20 @@ export default function MenuDivin({ x, y, onClose }: Props) {
       ))}
 
       <hr className={styles.hr} />
+
+      {/* Pouvoirs divins */}
+      <strong style={{ display: "block", marginBottom: 4 }}>Pouvoirs divins</strong>
+      {DIVINE_ACTIONS.map(a => (
+        <div
+          key={a.type}
+          style={{ cursor: "pointer", padding: 4, color: "pink" }}
+          onClick={() => emitDivineAction({ type: a.type, x, y })}
+        >
+          {a.label}
+        </div>
+      ))}
+
+      <hr style={{ borderColor: "#444", margin: "6px 0" }} />
 
       {/* Cancel */}
       <div

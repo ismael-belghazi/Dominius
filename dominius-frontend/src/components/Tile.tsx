@@ -4,7 +4,7 @@ import styles from "./Tile.module.css";
 
 interface Props {
   tile: TileType;
-  overlay: string[];
+  overlay?: string[]; // rendu optionnel avec fallback
   onMouseEnter?: () => void;
   onMouseDown?: () => void;
   onClick?: () => void;
@@ -17,7 +17,7 @@ const TILE_COLORS: Record<string, string> = {
   MOUNTAIN: "#888888",
 };
 
-export default function Tile({ tile, overlay, onMouseEnter, onMouseDown, onClick }: Props) {
+export default function Tile({ tile, overlay = [], onMouseEnter, onMouseDown, onClick }: Props) {
   const iconSize = 10;
   return (
     <div
