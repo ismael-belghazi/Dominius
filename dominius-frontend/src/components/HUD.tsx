@@ -1,5 +1,6 @@
 import React from "react";
 import { TileTypeName, DivineAction } from "../types/world";
+import styles from "./HUD.module.css";
 
 interface HUDProps {
   selectedTileType: TileTypeName;
@@ -10,31 +11,28 @@ interface HUDProps {
 
 export default function HUD({ selectedTileType, setSelectedTileType, selectedPower, setSelectedPower }: HUDProps) {
   return (
-    <div style={{ display:"flex", gap:"16px", marginBottom:"8px" }}>
-      
-      <div>
+    <div className={styles.hud}>
+      <div className={styles.section}>
         <strong>Terrain:</strong>
-        {["GRASS","SAND","WATER","MOUNTAIN"].map(t=>(
+        {["GRASS","SAND","WATER","MOUNTAIN"].map(t => (
           <button
             key={t}
-            style={{ backgroundColor: selectedTileType===t?"#555":"#222", color:"#fff", margin:"2px" }}
+            className={`${styles.button} ${selectedTileType===t ? styles.active : ""}`}
             onClick={()=>setSelectedTileType(t as TileTypeName)}
           >{t}</button>
         ))}
       </div>
-
-      <div>
+      <div className={styles.section}>
         <strong>Pouvoir:</strong>
-        {["TERRAFORM","SPAWN_VILLAGE","SPAWN_KINGDOM","SMITE","SPAWN_ANIMAL","BLESS"].map(p=>(
+        {["TERRAFORM","SPAWN_VILLAGE","SPAWN_KINGDOM","SMITE","SPAWN_ANIMAL","BLESS"].map(p => (
           <button
             key={p}
-            style={{ backgroundColor: selectedPower===p?"#555":"#222", color:"#fff", margin:"2px" }}
+            className={`${styles.button} ${selectedPower===p ? styles.active : ""}`}
             onClick={()=>setSelectedPower(p as DivineAction["type"])}
           >{p}</button>
         ))}
-        {/* Nouveau bouton INSPECT */}
         <button
-          style={{ backgroundColor: selectedPower==="INSPECT"?"#555":"#222", color:"#fff", margin:"2px" }}
+          className={`${styles.button} ${selectedPower==="INSPECT" ? styles.active : ""}`}
           onClick={()=>setSelectedPower("INSPECT")}
         >INSPECT</button>
       </div>

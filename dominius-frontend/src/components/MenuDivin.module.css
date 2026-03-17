@@ -1,0 +1,83 @@
+/* MenuDivin.module.css */
+.menu {
+  position: fixed;
+  background: #222;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.7);
+  z-index: 1000;
+  min-width: 180px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.hr {
+  border-color: #444;
+  margin: 8px 0;
+}
+
+.item {
+  width: 140px;
+  height: 36px;
+  margin: 6px auto;
+  cursor: pointer;
+  border-radius: 50%; /* rond */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.item:hover {
+  transform: scale(1.05);
+}
+
+/* Tiles = gris */
+.tile {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+/* Village = jaune */
+.village {
+  background-color: #ffeb3b;
+  color: #111;
+  border: 2px dashed #fbc02d;
+}
+
+.village:hover {
+  background-color: #ffd700;
+}
+
+/* Royaume = orange */
+.kingdom {
+  background-color: #ff9800;
+  color: #111;
+  border: 2px solid #f57c00;
+}
+
+.kingdom:hover {
+  background-color: #fb8c00;
+}
+
+/* Animal = vert */
+.animal {
+  background-color: #4caf50;
+  color: #fff;
+  border: 2px solid #388e3c;
+}
+
+.animal:hover {
+  background-color: #388e3c;
+}

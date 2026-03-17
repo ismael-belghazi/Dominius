@@ -1,6 +1,7 @@
 import React from "react";
 import { TileTypeName } from "../types/world";
 import { socket } from "../engine/socket";
+import styles from "./MenuDivin.module.css";
 
 interface Props {
   x: number;
@@ -8,83 +9,69 @@ interface Props {
   onClose: () => void;
 }
 
-// Types disponibles
 const TILE_TYPES: TileTypeName[] = ["GRASS", "SAND", "WATER", "MOUNTAIN"];
 const ANIMAL_TYPES = ["Cow", "Sheep", "Pig", "Chicken", "Deer", "Rabbit", "Fish"];
 
 export default function MenuDivin({ x, y, onClose }: Props) {
-  // Fonction pour émettre une action divine
   const emitDivineAction = (action: object) => {
     socket.emit("DIVINE_ACTION", action);
     onClose();
   };
 
   return (
-    <div style={{
-      position: "fixed",
-      top: y,
-      left: x,
-      background: "#222",
-      color: "#fff",
-      padding: "8px",
-      borderRadius: "4px",
-      zIndex: 1000,
-      minWidth: "140px",
-      boxShadow: "0 0 10px rgba(0,0,0,0.5)"
-    }}>
+    <div className={styles.menu} style={{ top: y, left: x }}>
       {/* Terraform */}
-      <strong style={{ display: "block", marginBottom: "4px" }}>Terraform</strong>
+      <div className={styles.header}>Terraform</div>
       {TILE_TYPES.map(t => (
         <div
           key={t}
-          style={{ cursor: "pointer", padding: "4px" }}
+          className={`${styles.item} ${styles.tile}`}
           onClick={() => emitDivineAction({ type: "TERRAFORM", x, y, tileType: t })}
         >
           {t}
         </div>
       ))}
 
-      <hr style={{ borderColor: "#444", margin: "6px 0" }} />
+      <hr className={styles.hr} />
 
-      {/* Spawn Village */}
+      {/* Villages et Royaumes */}
       <div
-        style={{ cursor: "pointer", padding: "4px", color: "yellow" }}
+        className={`${styles.item} ${styles.village}`}
         onClick={() => emitDivineAction({ type: "SPAWN_VILLAGE", x, y, name: `Village-${Date.now()}` })}
       >
         Spawn Village
       </div>
 
-      {/* Spawn Kingdom */}
       <div
-        style={{ cursor: "pointer", padding: "4px", color: "orange" }}
-        onClick={() => emitDivineAction({ 
-          type: "SPAWN_KINGDOM", 
-          name: `Kingdom-${Date.now()}`,
-          x,  
-          y
-        })}
+        className={`${styles.item} ${styles.kingdom}`}
+        onClick={() => emitDivineAction({ type: "SPAWN_KINGDOM", x, y, name: `Kingdom-${Date.now()}` })}
       >
         Spawn Kingdom
       </div>
 
-      <hr style={{ borderColor: "#444", margin: "6px 0" }} />
+      <hr className={styles.hr} />
 
-      {/* Spawn Animal */}
-      <strong style={{ display: "block", marginTop: "6px", marginBottom: "4px" }}>Spawn Animal</strong>
+      {/* Animaux */}
+      <div className={styles.header}>Spawn Animal</div>
       {ANIMAL_TYPES.map(a => (
         <div
           key={a}
-          style={{ cursor: "pointer", padding: "4px", color: "lightgreen" }}
+          className={`${styles.item} ${styles.animal}`}
           onClick={() => emitDivineAction({ type: "SPAWN_ANIMAL", x, y, animalType: a })}
         >
           {a}
         </div>
       ))}
 
-      <hr style={{ borderColor: "#444", margin: "6px 0" }} />
+      <hr className={styles.hr} />
 
       {/* Cancel */}
-      <div style={{ cursor: "pointer", color: "red", padding: "4px" }} onClick={onClose}>Cancel</div>
+      <div
+        className={`${styles.item} ${styles.tile}`}
+        onClick={onClose}
+      >
+        Cancel
+      </div>
     </div>
   );
 }

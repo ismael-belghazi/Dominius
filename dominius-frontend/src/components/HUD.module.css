@@ -1,0 +1,29 @@
+.hud {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.section strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.button {
+  margin: 2px;
+  padding: 4px 8px;
+  background: #222;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.button:hover {
+  background: #444;
+}
+
+.button.active {
+  background: #5a5aff;
+}

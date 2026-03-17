@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { socket } from "../engine/socket";
+import styles from "./Toolbar.module.css";
 
 interface Props {
   onSelectPower?: (power: string) => void;
@@ -13,24 +13,19 @@ export default function ToolBar({ onSelectPower }: Props) {
     if (onSelectPower) onSelectPower(power);
   };
 
-  const buttonStyle = (active: boolean) => ({
-    marginRight: "4px",
-    padding: "4px 8px",
-    background: active ? "#444" : "#222",
-    color: "#fff",
-    border: "1px solid #555",
-    cursor: "pointer",
-    borderRadius: "4px"
-  });
+  const powers = ["TERRAFORM","SPAWN_VILLAGE","SPAWN_KINGDOM","SPAWN_ANIMAL","SMITE","BLESS"];
 
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, background: "#111", color: "#fff", padding: "8px", zIndex: 1000 }}>
-      <button style={buttonStyle(selectedPower === "TERRAFORM")} onClick={() => handleClick("TERRAFORM")}>Terraform</button>
-      <button style={buttonStyle(selectedPower === "SPAWN_VILLAGE")} onClick={() => handleClick("SPAWN_VILLAGE")}>Spawn Village</button>
-      <button style={buttonStyle(selectedPower === "SPAWN_KINGDOM")} onClick={() => handleClick("SPAWN_KINGDOM")}>Spawn Kingdom</button>
-      <button style={buttonStyle(selectedPower === "SPAWN_ANIMAL")} onClick={() => handleClick("SPAWN_ANIMAL")}>Spawn Animal</button>
-      <button style={buttonStyle(selectedPower === "SMITE")} onClick={() => handleClick("SMITE")}>Smite</button>
-      <button style={buttonStyle(selectedPower === "BLESS")} onClick={() => handleClick("BLESS")}>Bless</button>
+    <div className={styles.toolbar}>
+      {powers.map(p => (
+        <button
+          key={p}
+          className={`${styles.button} ${selectedPower === p ? styles.buttonActive : ""}`}
+          onClick={() => handleClick(p)}
+        >
+          {p.replace("_", " ")}
+        </button>
+      ))}
     </div>
   );
 }
